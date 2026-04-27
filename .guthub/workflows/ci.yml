@@ -1,0 +1,28 @@
+name: Radar Interference Model CI
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install Project Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        # 严格按照你的 evaluate.py 和 train.py 安装依赖，避免 import 报错
+        pip install torch torchvision numpy scikit-learn matplotlib seaborn tqdm pytest
+
+    - name: Run Model Unit Tests
+      run: |
+        pytest test_model_ci.py -v
